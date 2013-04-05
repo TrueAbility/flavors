@@ -2,7 +2,7 @@ class CreatePreferences < ActiveRecord::Migration
   def change
     create_table :preferences do |t|
       t.string :name
-      t.boolean :value
+      t.text :value
       t.integer :prefered_id
       t.string :prefered_type
 
