@@ -7,13 +7,16 @@ module Flavors
     module ClassMethods
       def preference(name, options = {}, &callback)
         has_many :preferences, :as => :prefered, :class_name => "::Flavors::Preference"
+        options[:type] ||= "string" #default
 
         define_method(name) do
           read_preference(name, options[:default])
         end
 
-        define_method("#{name}?") do
-          read_preference(name, options[:default])
+        if options[:type].to_s == "boolean"
+          define_method("#{name}?") do
+            read_preference(name, options[:default]) == "t"
+          end
         end
 
         define_method("#{name}=") do |value|
