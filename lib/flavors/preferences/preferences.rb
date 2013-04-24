@@ -9,20 +9,40 @@ module Flavors
         has_many :preferences, :as => :prefered, :class_name => "::Flavors::Preference"
         options[:type] ||= "string" #default
 
-        define_method(name) do
-          read_preference(name, options[:default])
-        end
-
         if options[:type].to_s == "boolean"
-          define_method("#{name}?") do
-            read_preference(name, options[:default]) == "t"
+
+          define_method(name) do
+            value = read_preference(name, options[:default])
+            value == "t"
           end
+
+          define_method("#{name}?") do
+            value = read_preference(name, options[:default])
+            value == "t"
+          end
+
+          define_method("#{name}=") do |value|
+            value = case value
+            when 0, "0", "f", false then false
+            else true
+            end
+            write_preference(name, value)
+            callback.call(self, value) if callback
+          end
+
+        else
+
+          define_method(name) do
+            read_preference(name, options[:default])
+          end
+
+          define_method("#{name}=") do |value|
+            write_preference(name, value)
+            callback.call(self, value) if callback
+          end
+
         end
 
-        define_method("#{name}=") do |value|
-          write_preference(name, value)
-          callback.call(self, value) if callback
-        end
       end
     end
 
