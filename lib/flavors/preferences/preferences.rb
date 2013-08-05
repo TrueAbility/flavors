@@ -57,7 +57,7 @@ module Flavors
     end
 
     def write_preference(name, value)
-      p = self.preferences.find_or_create_by_name(name)
+      p = self.preferences.find_or_create_by(name: name)
       p.update_attribute(:value, value)
     end
   end
