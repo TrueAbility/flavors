@@ -47,7 +47,7 @@ module Flavors
     end
 
     def read_preference(name, default = nil)
-      if p = self.preferences.where(:name => name).first
+      if p = self.preferences.where(name: name).first
         p.value
       elsif default.present?
         default
@@ -57,7 +57,7 @@ module Flavors
     end
 
     def write_preference(name, value)
-      p = self.preferences.find_or_create_by(name: name)
+      p = self.preferences.where(name: name).first_or_create
       p.update_attribute(:value, value)
     end
   end
