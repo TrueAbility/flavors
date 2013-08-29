@@ -13,12 +13,12 @@ module Flavors
 
           define_method(name) do
             value = read_preference(name, options[:default])
-            value == "t"
+            value == "t" || value == true || value == :true
           end
 
           define_method("#{name}?") do
             value = read_preference(name, options[:default])
-            value == "t"
+            value == "t" || value == true || value == :true
           end
 
           define_method("#{name}=") do |value|
